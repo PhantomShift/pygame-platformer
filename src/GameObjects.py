@@ -26,7 +26,9 @@ class Player:
         self.teleported = False
         self.alive = True
         self.object_list = object_list
+        self.died = BindableEvent()
 
+        self.connection_on_died = self.died.connect(self.on_died)
         self.connection_on_space = InputHandler.input_began.connect(self.on_space)
 
     def on_space(self, inputted):
@@ -37,6 +39,9 @@ class Player:
                 self.vel = Vector2(self.vel.x, -100)
             elif not self.teleported:
                 self.teleport()
+    def on_died(self):
+        self.alive = False
+        print("died")
 
     def draw(self):
         self.rect.draw()
@@ -80,7 +85,7 @@ class Player:
         self.pos += self.vel * elapsedTime
         self.rect.position = self.pos
         if self.pos.y > pygame.display.get_surface().get_height():
-            self.alive = False
+            self.died.fire()
 
     def teleport(self):
         pressed = pygame.key.get_pressed()
@@ -125,4 +130,4 @@ class KillerRectangle(InteractiveRectangle):
     
     @staticmethod
     def touch(player: Player):
-        player.alive = False
+        player.died.fire()

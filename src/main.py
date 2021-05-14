@@ -1,6 +1,6 @@
 import pygame
 pygame.init()
-import sys, LevelManager, UserInterface, pygame.event, pygame.time, pygame.display
+import sys, LevelManager, UserInterface, GameObjects, pygame.event, pygame.time, pygame.display
 from Vector2 import Vector2
 from time import time
 from InputHandler import InputHandler, InputObject
@@ -14,16 +14,18 @@ def level_changed(new_level: LevelManager.LevelObject):
     OBJECTS = [obj for obj in new_level.objects.keys()]
     DRAWABLES = [obj for obj in new_level.objects.keys()]
     print(OBJECTS)
-    if player:
+    if isinstance(player, GameObjects.Player):
+        player.connection_on_died.disconnect()
         player.connection_on_space.disconnect()
     player = new_level.player
+    player.died.connect(LevelManager.reset_level)
     DRAWABLES.append(player)
 LevelManager.on_level_changed.connect(level_changed)
 
 test = UserInterface.TextBox(text="Start Game")
 def start(inputted):
     DRAWABLES.clear()
-    LevelManager.change_level(LevelManager.example_level.load())
+    LevelManager.change_level(LevelManager.example_level)
 test.mouse_clicked.connect(start)
 DRAWABLES.append(test)
 

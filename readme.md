@@ -1,0 +1,71 @@
+# Pygame Platformer
+## Quick Overview
+This was my final project for my programming class in 12th grade. I decided to make a game since that was what I was mainly interested in. I chose to do a platformer specifically since I didn't want to make something too complex considering time constraints, and I didn't want to work on something similar to what I was already doing.
+
+This little platformer just contains a couple of levels with fairly simple controls. The main gimmick is the player's aerial mobility; after jumping, the player can teleport and then jump one more time after teleporting. The hope was to make something somewhat complex despite the lack of time I had to commit towards making the project.
+
+### Controls
+- A, D - Left and Right, respectively
+- Space - Jump -> Teleport -> Jump (resets when landing)
+> Quick Note: this platformer was developed with Python 3.9 and pygame 2.0.1; I am unaware of how it behaves with any different versions
+## Development Process
+### Some Background
+Although this was my first time working with pygame, I did have some experience with game development, particularly a year's experience with Roblox (and thus lua) as well as a more recent [personal project](https://github.com/PhantomShift/bullet-hell) using [LOVE2D](https://love2d.org/), a 2D game framework for the lua language. It is through this that I had most of my experience with the object oriented approach towards programming, which is honestly somewhat of a headache in lua in comparison to python.
+
+In particular, lua doesn't have a built-in class system. The language meant to be fairly lightweight and fast, so it doesn't have quite the same level of built-in features. What lua does have is its (only) datastructure, the table. [Lua documentation](https://www.lua.org/pil/2.5.html) states that tables are associative arrays, "arrays that can be indexed not only with numbers, but also with strings or any other value of the language, except nil". I can't claim to fully understand the implications of this, but the table practically acts as the one-for-all datastructure that can be implemented as anything like arrays, dictionaries, and objects. It goes without saying that setting up classes/inheritance in lua is based on these tables. The reason that they're capable of this is the thing that makes tables highly customizable; metatables. Without going into too much depth, considering how lengthy this explanation is already, metatables *typically* serve as the "back-up" table whenever a key is not found in a table. So for example, say we have a table with keys "a", "b", and "c", and we try to index with key "d"; lua would find nothing that matches in the table, and so look to its metatable, if it exists. As such, object oriented approaches in lua use a prototyping system, where objects are defined and created, and have other objects inherit from them with this metatable indexing behavior.
+
+To give a quick example of how setting up a class in lua compares to python, here is this bit of code:
+```lua
+-- Lua
+local Animal = {sound="Hello World"}
+Animal.__index = Animal -- Determines what table is looked at when an index is not found in a given table
+function Animal:make_sound() -- table:func() is syntactic sugar for table.func(self)
+    print(self.sound)
+end
+-- the approximate equivalent of both extending classes and creating objects in python
+function Animal:new(t)
+    local t = t or {}
+    setmetatable(t, self) -- sets "self" as the metatable of the new object
+    return t
+end
+-- Extending the Animal class with Dog
+local Dog = Animal:new({sound = "Bow wow"})
+-- Creating object Doggo with class Dog
+local Doggo = Dog:new()
+Doggo:make_sound() --> "Bow wow"
+```
+```py
+# Python
+class Animal:
+    def __init__(self, sound="Hello World"):
+        self.sound = sound
+    def make_sound(self):
+        print(self.sound)
+class Dog(Animal):
+    def __init__(self, sound="Bow wow"):
+        super().__init__(sound)
+Doggo = Dog()
+Doggo.make_sound() # "Bow wow"
+```
+You can see from this little bit that the languages are fairly different, as lua is potentially more flexible but can be rather involved when it comes to setting up a reliable system, whereas python can be much simpler since it has its own dedicated class system. It should be noted that this is in no way a one-to-one translation, as objects have their own particular built in behavior in python, such as throwing errors when indexed with an invalid attribute, whereas such things really would have to be manually defined in lua.
+
+### Setting Up
+After familiarizing myself a little with pygame, my initial process was setting up the very bare bones of what I would need in a 2D game, regardless of what genre it would be. This involved setting up the Vector2 and Geometry modules for easy manipulation of positions, velocities, etc. as well as the BindableEvent class, which emulates the [RBLXScriptSignal](https://developer.roblox.com/en-us/api-reference/datatype/RBXScriptSignal) I'm much more familiar with through my experience with lua. To explain a little more about the BindableEvent class, it essentially provides a very quick and easy way to handle events in the environment. Rather than fumbling around with pushing/polling for events, events can simply be executed whenever they occur, as it spawns seperate threads where the relevant code is executed. This is also the philosophy behind the InputHandler module, as I didn't want to fumble around with pushing/polling for the user's inputs. 
+
+### User Interface
+Along with this, I also wanted to lay the groundwork for any user interface. My approach was once again to emulate what I was familiar, which is the story behind the Instance class and its derivative, GuiObjects. In hindsight, I probably didn't need to go into such depth considering the scale of the game, but at the time I wasn't sure exactly what kind of game was going to make, I just knew I would need some sort of user interface. Instance is essentially meant to be the base class of all objects in the game that abide by a parent-child hierarchy. The reason for this approach is that it makes it easy to organize things based on their relationships. For example, within subclass GuiObject, we have Frame and TextBox. If we wanted to cover up, say, half the screen for the interface, but only have a specific part of that half actually have the text, we would have a Frame that takes up half the space of the screen, and then a TextBox that is a child of that Frame which renders the relevant text.
+
+### Collision System
+Going into more depth with the Geometry module, the collision system of the game is based on [this tutorial](https://www.youtube.com/watch?v=8JJ-4JgR7Dg) by javidx9, a mainly C++ programmer who makes YouTube tutorials on the side. However, the process here specifically was essentially just porting it from my personal project written in lua, as I had already set it up there. It is a similar story with Vector2 and BindableEvent. The collision system makes clever use of raycasting and the properties of axis-aligned (meaning there is no rotation) rectangles, where a moving rectangle can be represented as a point, while the rectangles that can potentially be collided with are expanded such that it would have the same effect as the two rectangles colliding. Thus, dynamic rectangle vs rectangle collision ultimately boils down to point vs rectangle checking with some help from raycasting to resolve any collisions found.
+
+## General Development Experience
+Overall I'd say I had the typical developer experience when working on this project: face-palming at typos, wondering why some code doesn't function as expected, the desire to bang my head against the wall, the usual. I will say however that the pygame documentation is rather annoying to deal with. It certainly is in-depth and provides everything you need, but I found the organization rather confusing, and the visuals make reading hard to read at times. I never really faced any real "problems" per se, but I did do a lot of exploring over the course of the project.
+
+For one, it really fleshed out my understanding of the class system in python as I make extensive use of objects that I define myself, as you can see through all the modules I created just for this project. I also familiarized myself a little bit with python's typing system. I program using VSCode, so it's particularly helpful since intellisense helps out a lot with keeping track of objects and their attributes in python (unlike lua, which is practically the wild-west in comparison). You can see me make (inconsistent) use of type hints such as when defining attributes in classes or return values of functions.
+
+I would say that the real biggest challenge in this project was setting everything up. After all, pygame is simply a group of modules; it's *not* a game engine. It was only after I had all the tools properly set up that I could really start getting into some "game design". Thankfully the most bare-metal tasks like actually rendering objects to the screen are magicked away by the module, but pretty much any complex behavior relevant to game design will have to be defined by the developer, if you're not using any external libraries to help out. Really the only reason I could even do this project was thanks to my prior experience; if I had gone into this project with only experience I had from class, it probably would've been a nightmare. However, overall, I had fun, even if there was some frustration and late nights. The experience really cements my desire to pursue development/programming as a career, as it, in a way, proves that my skills are not exclusive to just the lua language, but to any I can potentially get my hands on.
+
+## Resources
+- [pygame](https://www.pygame.org/news)
+- [pygame documentation](https://www.pygame.org/docs/)
+- [javidx9](https://www.youtube.com/channel/UC-yuWVUplUJZvieEligKBkA)

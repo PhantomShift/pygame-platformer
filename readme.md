@@ -8,6 +8,8 @@ This little platformer just contains a couple of levels with fairly simple contr
 - A, D - Left and Right, respectively
 - Space - Jump -> Teleport -> Jump (resets when landing)
 > Quick Note: this platformer was developed with Python 3.9 and pygame 2.0.1; I am unaware of how it behaves with any different versions
+
+To run the game, run `main.py` in the `src` directory.
 ## Development Process
 ### Some Background
 Although this was my first time working with pygame, I did have some experience with game development, particularly a year's experience with Roblox (and thus lua) as well as a more recent [personal project](https://github.com/PhantomShift/bullet-hell) using [LOVE2D](https://love2d.org/), a 2D game framework for the lua language. It is through this that I had most of my experience with the object oriented approach towards programming, which is honestly somewhat of a headache in lua in comparison to python.

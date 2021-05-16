@@ -28,9 +28,6 @@ class Vector2:
     def __hash__(self) -> int:
         return hash(("Vector2", self.x, self.y))
 
-    def __setattr__(self, attribute, value):
-        raise TypeError("Vector2s are immutable")
-
     def __eq__(self, other):
         return hash(self) == hash(other)
 

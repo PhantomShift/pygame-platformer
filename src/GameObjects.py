@@ -18,9 +18,12 @@ class InteractiveRectangle(Geometry.Rectangle):
         self.on_touched.fire(player)
 
 class Player:
-    def __init__(self, object_list: dict, x=0, y=0):
+    def __init__(self, object_list: dict, x=0, y=0, max_speed=200, acceleration=250, friction=220):
         self.pos = Vector2.new(x, y)
         self.vel = Vector2()
+        self.max_speed = max_speed
+        self.acceleration = acceleration
+        self.friction = friction
         self.rect = Geometry.Rectangle(x, y, 40, 40, color=(230, 50, 50))
         self.jumped = False
         self.teleported = False
@@ -50,12 +53,15 @@ class Player:
         if not self.alive:
             return
         pressed = pygame.key.get_pressed()
-        vel = Vector2()
+        input_vel = Vector2()
         if pressed[pygame.K_a]:
-            vel += LEFT
+            input_vel += LEFT
         if pressed[pygame.K_d]:
-            vel += RIGHT
-        vel *= 100
+            input_vel += RIGHT
+        if input_vel != ZERO_VECTOR:
+            vel = Vector2(self.vel.x, 0).move_toward(input_vel * self.max_speed, self.acceleration)
+        else:
+            vel = Vector2(self.vel.x, 0).move_toward(ZERO_VECTOR, self.friction)
         vel += GRAVITY
         self.vel += vel * elapsedTime
         self.rect.velocity = self.vel

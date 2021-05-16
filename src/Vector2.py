@@ -83,6 +83,12 @@ class Vector2:
             angle = math.cos(angle)
         return Vector2.from_angle(math.atan2(self.y, self.x) + angle, self.magnitude)
 
+    def move_toward(self, destination: Vector2, delta) -> Vector2:
+        """inspired by Godot Vector2's move_toward method"""
+        if destination == self:
+            return self
+        return self + (destination - self).unit * delta
+
     @vector_only
     def distance_to(self, other):
         return (self - other).magnitude

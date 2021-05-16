@@ -18,7 +18,7 @@ class InteractiveRectangle(Geometry.Rectangle):
         self.on_touched.fire(player)
 
 class Player:
-    def __init__(self, object_list: dict, x=0, y=0, max_speed=200, acceleration=250, friction=220):
+    def __init__(self, object_list: dict, x=0, y=0, max_speed=200, acceleration=250, friction=400):
         self.pos = Vector2.new(x, y)
         self.vel = Vector2()
         self.max_speed = max_speed

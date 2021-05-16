@@ -129,7 +129,7 @@ class Player:
         self.jumped = False
 
 class KillerRectangle(InteractiveRectangle):
-    def __init__(self, x, y, w, h, color=None):
+    def __init__(self, x, y, w, h, color=(255, 0, 0)):
         super().__init__(x, y, w, h, color)
         
         self.on_touched.connect(self.touch)

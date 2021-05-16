@@ -91,6 +91,11 @@ class Vector2:
         if destination == self:
             return self
         return self + (destination - self).unit * delta
+    
+    def clamped(self, magnitude):
+        """inspired by Godot Vector2's clamed method;
+        returns changed Vector2 such that direction is the same but matches the given magnitude"""
+        return self.unit * magnitude
 
     @vector_only
     def distance_to(self, other):

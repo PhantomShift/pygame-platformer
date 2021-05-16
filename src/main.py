@@ -29,9 +29,12 @@ title = UserInterface.TextBox(text="Pygame Platformer", anchor_point=Vector2(0.5
                                 color=(0, 0, 0), text_color=(255, 255, 255),
                                 font_size=48)
 def start(inputted):
+    for drawable in DRAWABLES:
+        drawable.visible = False
+    start_connection.disconnect()
     DRAWABLES.clear()
     LevelManager.change_level(LevelManager.test_level)
-test.mouse_clicked.connect(start)
+start_connection = test.mouse_clicked.connect(start)
 DRAWABLES.append(test)
 DRAWABLES.append(title)
 

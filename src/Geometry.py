@@ -41,6 +41,8 @@ class Rectangle:
         pygame.draw.rect(pygame.display.get_surface(), self.color, self.pygame_rect())
     def destroy(self):
         del Objects[self]
+    def get_center(self):
+        return self.position + self.size / 2
 
     @staticmethod
     def from_vectors(pos: Vector2, size: Vector2):

@@ -23,18 +23,24 @@ def level_changed(new_level: LevelManager.LevelObject):
 LevelManager.on_level_changed.connect(level_changed)
 
 test = UserInterface.TextBox(text="Start Game", anchor_point=Vector2(0.5,0.5), size=UserInterface.UDim2.from_offset(200, 100), pos=UserInterface.UDim2.from_scale(0.5,0.5), font_size=24)
+title = UserInterface.TextBox(text="Pygame Platformer", anchor_point=Vector2(0.5, 0.5),
+                                pos=UserInterface.UDim2(Vector2(0.5, 0.5), Vector2(0, -100)),
+                                size=UserInterface.UDim2(),
+                                color=(0, 0, 0), text_color=(255, 255, 255),
+                                font_size=48)
 def start(inputted):
     DRAWABLES.clear()
     LevelManager.change_level(LevelManager.test_level)
 test.mouse_clicked.connect(start)
 DRAWABLES.append(test)
+DRAWABLES.append(title)
 
 GRAVITY = Vector2(0, 100)
 BG_COLOR = (0, 0, 0)
 DISPLAYSURF = pygame.display.set_mode((800, 600))
 DISPLAYSURF.fill(BG_COLOR)
 print(DISPLAYSURF)
-pygame.display.set_caption("Example")
+pygame.display.set_caption("Pygame Platformer")
 
 class Timer:
     def __init__(self):

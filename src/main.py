@@ -22,7 +22,7 @@ def level_changed(new_level: LevelManager.LevelObject):
     DRAWABLES.append(player)
 LevelManager.on_level_changed.connect(level_changed)
 
-test = UserInterface.TextBox(text="Start Game")
+test = UserInterface.TextBox(text="Start Game", anchor_point=Vector2(0.5,0.5), size=UserInterface.UDim2.from_offset(200, 100), pos=UserInterface.UDim2.from_scale(0.5,0.5), font_size=24)
 def start(inputted):
     DRAWABLES.clear()
     LevelManager.change_level(LevelManager.example_level)

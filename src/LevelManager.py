@@ -61,3 +61,10 @@ def goal_touched2(player):
 test_level.add_object(base)
 test_level.add_object(goal2)
 goal2.on_touched.connect(goal_touched2)
+
+level2 = Level(50, 520)
+level2.add_object(Geometry.Rectangle(0, 580, 800, 120))
+level2.add_object(GameObjects.KillerRectangle(400, 540, 20, 60))
+level2_goal = GameObjects.InteractiveRectangle(760, 540, 40, 40, color=(50, 50, 240))
+def level2_goal_touched(player):
+    change_level(example_level)

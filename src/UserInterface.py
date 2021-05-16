@@ -87,11 +87,14 @@ class Frame(GuiObject, class_name="Frame"):
 class TextBox(Frame, class_name="TextBox"):
     def __init__(self, parent=None, size=UDim2.from_offset(100, 100), pos=UDim2.new(),
                 anchor_point = ZERO_VECTOR, visible=True, color=(255, 255, 255),
-                text="TextBox", text_color=(0,0,0), font=DEFAULT_FONT):
+                text="TextBox", text_color=(0,0,0), font="Arial", font_size=12):
         super().__init__(parent, size, pos, anchor_point, visible, color)
         self.text: str = text
         self.text_color = text_color
-        self.font: pygame.font.Font = font
+        if font == "Arial" and font_size == 12:
+            self.font = DEFAULT_FONT
+        else:
+            self.font: pygame.font.Font = pygame.font.SysFont(font, font_size)
     
     def draw(self):
         if super().draw():

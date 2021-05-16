@@ -85,7 +85,9 @@ class Frame(GuiObject, class_name="Frame"):
             return True
 
 class TextBox(Frame, class_name="TextBox"):
-    def __init__(self, parent=None, size=UDim2.from_offset(100, 100), pos=UDim2.new(), anchor_point = ZERO_VECTOR, visible=True, color=(255, 255, 255), text="TextBox", text_color=(0,0,0), font=DEFAULT_FONT):
+    def __init__(self, parent=None, size=UDim2.from_offset(100, 100), pos=UDim2.new(),
+                anchor_point = ZERO_VECTOR, visible=True, color=(255, 255, 255),
+                text="TextBox", text_color=(0,0,0), font=DEFAULT_FONT):
         super().__init__(parent, size, pos, anchor_point, visible, color)
         self.text: str = text
         self.text_color = text_color
@@ -93,8 +95,10 @@ class TextBox(Frame, class_name="TextBox"):
     
     def draw(self):
         if super().draw():
-            surf = self.font.render(self.text, True, self.text_color)
-            pygame.display.get_surface().blit(surf, self.absolute_pos.unpack(), self.get_pyrect())
+            text = self.font.render(self.text, True, self.text_color)
+            rect = text.get_rect()
+            pos = self.absolute_pos + self.absolute_size / 2 - Vector2(rect.width/2, rect.height/2)
+            pygame.display.get_surface().blit(text, pos.unpack())
 
 
 if __name__ == "__main__":

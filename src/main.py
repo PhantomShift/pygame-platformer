@@ -11,42 +11,6 @@ import game_objects
 from vector2 import Vector2
 from input_handler import InputHandler, InputObject
 
-
-OBJECTS = []
-DRAWABLES = []
-player = None
-def level_changed(new_level: level_manager.LevelObject):
-    global OBJECTS, DRAWABLES, player
-    OBJECTS = list(new_level.objects.keys())
-    DRAWABLES = list(new_level.objects.keys())
-    print(OBJECTS)
-    if isinstance(player, game_objects.Player):
-        player.connection_on_died.disconnect()
-        player.connection_on_space.disconnect()
-    player = new_level.player
-    player.died.connect(level_manager.reset_level)
-    DRAWABLES.append(player)
-level_manager.on_level_changed.connect(level_changed)
-
-test = user_interface.TextBox(text="Start Game", anchor_point=Vector2(0.5,0.5),
-                            size=user_interface.UDim2.from_offset(200, 100),
-                            pos=user_interface.UDim2.from_scale(0.5,0.5), font_size=24)
-title = user_interface.TextBox(text="Pygame Platformer", anchor_point=Vector2(0.5, 0.5),
-                            pos=user_interface.UDim2(Vector2(0.5, 0.5), Vector2(0, -100)),
-                            size=user_interface.UDim2(),
-                            color=(0, 0, 0), text_color=(255, 255, 255),
-                            font_size=48)
-def start(inputted):
-    for drawable in DRAWABLES:
-        drawable.visible = False
-    start_connection.disconnect()
-    DRAWABLES.clear()
-    level_manager.change_level(level_manager.test_level)
-start_connection = test.mouse_clicked.connect(start)
-DRAWABLES.append(test)
-DRAWABLES.append(title)
-
-GRAVITY = Vector2(0, 100)
 BG_COLOR = (0, 0, 0)
 DISPLAYSURF = pygame.display.set_mode((800, 600))
 DISPLAYSURF.fill(BG_COLOR)
@@ -63,19 +27,53 @@ class Timer:
         self.current_time = now
         return delta_time
 
+class GameGlobals:
+    def __init__(self):
+        self.objects: list[object] = []
+        self.drawables: list[object] = []
+        self.player: game_objects.Player = None
+    
+    def level_changed(self, new_level: level_manager.LevelObject):
+        self.objects = list(new_level.objects.keys())
+        self.drawables = list(new_level.objects.keys())
+        print(self.objects)
+        if isinstance(self.player, game_objects.Player):
+            self.player.connection_on_died.disconnect()
+            self.player.connection_on_space.disconnect()
+        game_globals.player = new_level.player
+        game_globals.player.died.connect(level_manager.reset_level)
+        self.drawables.append(game_globals.player)
+    
+    def update(self, elapsedTime):
+        if isinstance(self.player, game_objects.Player):
+            self.player.update(elapsedTime)
+    
+    def draw(self):
+        DISPLAYSURF.fill(BG_COLOR)
+        for drawable in self.drawables:
+            drawable.draw()
+        
 
-timer = Timer()
-Pygame_Clock = pygame.time.Clock()
+game_globals = GameGlobals()
+level_manager.on_level_changed.connect(game_globals.level_changed)
 
-
-def update(elapsedTime):
-    if player:
-        player.update(elapsedTime)
-
-def draw():
-    DISPLAYSURF.fill(BG_COLOR)
-    for drawable in DRAWABLES:
-        drawable.draw()
+test = user_interface.TextBox(text="Start Game", anchor_point=Vector2(0.5,0.5),
+                            size=user_interface.UDim2.from_offset(200, 100),
+                            pos=user_interface.UDim2.from_scale(0.5,0.5), font_size=24)
+title = user_interface.TextBox(text="Pygame Platformer", anchor_point=Vector2(0.5, 0.5),
+                            pos=user_interface.UDim2(Vector2(0.5, 0.5), Vector2(0, -100)),
+                            size=user_interface.UDim2(),
+                            color=(0, 0, 0), text_color=(255, 255, 255),
+                            font_size=48)
+def start(inputted):
+    for drawable in game_globals.drawables:
+        drawable.visible = False
+    start_connection.disconnect()
+    game_globals.drawables.clear()
+    level_manager.change_level(level_manager.test_level)
+start_connection = test.mouse_clicked.connect(start)
+game_globals.drawables.append(test)
+game_globals.drawables.append(title)
 
 
 def test_input(inputted: InputObject):
@@ -85,29 +83,34 @@ def test_input(inputted: InputObject):
 InputHandler.input_began.connect(test_input)
 InputHandler.input_ended.connect(test_input)
 
+def main():
+    timer = Timer()
+    pygame_clock = pygame.time.Clock()
 
-# Game loop
-LOOPING = True
-while LOOPING:
-    # update phase
-    update(timer.update())
-   
-    # display phase
-    draw()
-    pygame.display.update()
+    # Game loop
+    looping = True
+    while looping:
+        # update phase
+        game_globals.update(timer.update())
 
-    # event phase
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            LOOPING = False
-            pygame.quit()
-            sys.exit()
-        elif event.type == pygame.KEYDOWN:
-            InputHandler.parse_input(event.type, event.key, InputHandler.BEGAN)
-        elif event.type == pygame.KEYUP:
-            InputHandler.parse_input(event.type, event.key, InputHandler.ENDED)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            InputHandler.parse_input(event.type, event.button, InputHandler.BEGAN)
-        elif event.type == pygame.MOUSEBUTTONUP:
-            InputHandler.parse_input(event.type, event.button, InputHandler.BEGAN)
-    Pygame_Clock.tick(60)
+        # display phase
+        game_globals.draw()
+        pygame.display.update()
+
+        # event phase
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                looping = False
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                InputHandler.parse_input(event.type, event.key, InputHandler.BEGAN)
+            elif event.type == pygame.KEYUP:
+                InputHandler.parse_input(event.type, event.key, InputHandler.ENDED)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                InputHandler.parse_input(event.type, event.button, InputHandler.BEGAN)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                InputHandler.parse_input(event.type, event.button, InputHandler.BEGAN)
+        pygame_clock.tick(60)
+
+main()

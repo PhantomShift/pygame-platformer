@@ -6,7 +6,7 @@ This little platformer just contains a couple of levels with fairly simple contr
 
 ### Controls
 - A, D - Left and Right, respectively
-- Space - Jump -> Teleport -> Jump (resets when landing)
+- Space -> Space + WASD -> Space - Jump -> Teleport -> Jump (resets when landing)
 > Quick Note: this platformer was developed with Python 3.9 and pygame 2.0.1; I am unaware of how it behaves with any different versions
 
 To run the game, run `main.py` in the `src` directory.

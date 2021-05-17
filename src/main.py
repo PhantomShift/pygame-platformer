@@ -14,7 +14,7 @@ from input_handler import InputHandler, InputObject
 BG_COLOR = (0, 0, 0)
 DISPLAYSURF = pygame.display.set_mode((800, 600))
 DISPLAYSURF.fill(BG_COLOR)
-print(DISPLAYSURF)
+#print(DISPLAYSURF)
 pygame.display.set_caption("Pygame Platformer")
 
 class Timer:
@@ -36,7 +36,7 @@ class GameGlobals:
     def level_changed(self, new_level: level_manager.LevelObject):
         self.objects = new_level.objects
         self.drawables = new_level.drawables
-        print(self.objects)
+        #print(self.objects)
         if isinstance(self.player, game_objects.Player):
             self.player.connection_on_died.disconnect()
             self.player.connection_on_space.disconnect()
@@ -76,12 +76,12 @@ game_globals.drawables.append(test)
 game_globals.drawables.append(title)
 
 
-def test_input(inputted: InputObject):
-    if inputted.input_type == pygame.MOUSEBUTTONDOWN:
-        (pos_x, pos_y) = pygame.mouse.get_pos()
-        print(pos_x, pos_y)
-InputHandler.input_began.connect(test_input)
-InputHandler.input_ended.connect(test_input)
+# def test_input(inputted: InputObject):
+#     if inputted.input_type == pygame.MOUSEBUTTONDOWN:
+#         (pos_x, pos_y) = pygame.mouse.get_pos()
+#         print(pos_x, pos_y)
+# InputHandler.input_began.connect(test_input)
+# InputHandler.input_ended.connect(test_input)
 
 def main():
     timer = Timer()

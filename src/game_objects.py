@@ -35,7 +35,7 @@ class Player:
 
     def on_space(self, inputted):
         if inputted.key == pygame.K_SPACE:
-            print("Space pressed")
+            #print("Space pressed")
             if not self.jumped:
                 self.jumped = True
                 self.vel = Vector2(self.vel.x, -100)
@@ -43,7 +43,7 @@ class Player:
                 self.teleport()
     def on_died(self):
         self.alive = False
-        print("died")
+        #print("died")
 
     def draw(self):
         self.rect.draw()
@@ -105,7 +105,7 @@ class Player:
             direction += DOWN
         if direction == ZERO_VECTOR:
             return
-        print("Teleported")
+        #print("Teleported")
         direction = direction.unit * 80
         resolve = None
         for rect in self.object_list:

@@ -42,7 +42,7 @@ class Level:
         self.drawables.append(drawable)
 
 def change_level(new_level: Level):
-    print("Hey level should be changed?")
+    #print("Hey level should be changed?")
     global CURRENT_LEVEL
     if CURRENT_LEVEL:
         for drawable in CURRENT_LEVEL.drawables:
@@ -71,7 +71,7 @@ BLUE = (50, 40, 240)
 
 goal = game_objects.InteractiveRectangle(760, 260, 40, 40, color=BLUE)
 def goal_touched(player):
-    print(test_level)
+    #print(test_level)
     change_level(end_level)
 goal.on_touched.connect(goal_touched)
 example_level.add_object(goal)

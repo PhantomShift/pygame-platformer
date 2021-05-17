@@ -68,7 +68,6 @@ class GuiObject(Instance, class_name="GuiObject"):
     
     @property
     def absolute_pos(self) -> Vector2:
-        print("HEY?")
         (x, y) = self.parent.absolute_size.unpack() if self.parent else pygame.display.get_surface().get_size()
         return self.pos.offset + self.pos.scale * Vector2.new(x, y) - self.absolute_size * self.anchor_point
 

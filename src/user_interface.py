@@ -44,7 +44,7 @@ class GuiObject(Instance, class_name="GuiObject"):
         self.mouse_clicked = BindableEvent()
 
         def mouse_clicked(inputted: InputObject):
-            if not self.visible:
+            if self.visible is False:
                 return
             if inputted.input_type == pygame.MOUSEBUTTONDOWN:
                 (x, y) = pygame.mouse.get_pos()

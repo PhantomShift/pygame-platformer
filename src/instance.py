@@ -14,8 +14,6 @@ class Instance():
         self.name = self.__class__.__name__
         self.class_name = self.name
         self.children: list[Instance] = []
-        if parent:
-            parent._add_child(self)
         self.parent = parent
 
     def __getattr__(self, name):
@@ -55,22 +53,22 @@ class Instance():
     def _add_child(self, child):
         self.children.append(child)
 
-    def find_first_child(self, name, resolve:bool=False) -> Union[object, bool]:
-        for child in sorted(self.children):
+    def find_first_child(self, name, resolve:bool=False):
+        for child in sorted(self.children, key=lambda c: c.name):
             if child.name == name:
                 return child
         return resolve
     
-    def get_children(self) -> list[object]:
+    def get_children(self):
         return self.children
     
-    def get_descendants(self) -> list[object]:
+    def get_descendants(self):
         descendants = [child for child in self.children]
         for child in self.children:
             descendants += child.get_descendants()
         return descendants
     
-    def get_ancestors(self) -> list[object]:
+    def get_ancestors(self):
         parent = self.parent
         ancestors = []
         while parent:

@@ -4,6 +4,7 @@ import geometry
 from vector2 import Vector2
 from bindable_event import BindableEvent
 from game_objects import Player
+from user_interface import TextBox, Frame, UDim2
 
 CURRENT_LEVEL = None
 on_level_changed = BindableEvent.new()
@@ -74,6 +75,9 @@ def goal_touched2(player):
 test_level.add_object(base)
 test_level.add_object(goal2)
 goal2.on_touched.connect(goal_touched2)
+level1_text = TextBox(size=UDim2(), pos=UDim2.from_scale(0.5, 0.5), anchor_point=Vector2(0.5, 0.5),
+                    text_color=(255, 255, 255), font_size=24, text="Press A and D to move")
+test_level.add_drawable(level1_text)
 
 level2 = Level(50, 520)
 level2.add_object(geometry.Rectangle(0, 580, 800, 120))
@@ -83,6 +87,9 @@ level2.add_object(level2_goal)
 def level2_goal_touched(player):
     change_level(level3)
 level2_goal.on_touched.connect(level2_goal_touched)
+level2_text = TextBox(size=UDim2(), pos=UDim2.from_scale(0.5, 0.5), anchor_point=Vector2(0.5, 0.5),
+                    text_color=(255, 255, 255), font_size=24, text="Press Space to jump")
+level2.add_drawable(level2_text)
 
 level3 = Level(50, 520)
 level3.add_object(geometry.Rectangle(0, 580, 800, 120))
@@ -92,6 +99,9 @@ level3.add_object(level3_goal)
 def level3_goal_touched(player):
     change_level(level4)
 level3_goal.on_touched.connect(level3_goal_touched)
+level3_text = TextBox(size=UDim2(), pos=UDim2.from_offset(185, 100), text_color=(255, 255, 255), 
+                    font_size=24, text="Press space in the air to teleport!")
+level3.add_drawable(level3_text)
 
 level4 = Level(50, 520)
 level4.add_rect(0, 580, 800, 120)
@@ -104,6 +114,9 @@ level4.add_object(level4_goal)
 def level4_goal_touched(player):
     change_level(level5)
 level4_goal.on_touched.connect(level4_goal_touched)
+level4_text = TextBox(size=UDim2(), pos=UDim2(Vector2(0.5, 0), Vector2(0, 40)), anchor_point=Vector2(0.5, 0),
+                    text_color=(255, 255, 255), font_size=24, text="Can you climb up?")
+level4.add_drawable(level4_text)
 
 level5 = Level(50, 520)
 level5.add_rect(0, 580, 100, 120)
@@ -113,3 +126,6 @@ level5.add_object(level5_goal)
 def level5_goal_touched(player):
     change_level(example_level)
 level5_goal.on_touched.connect(level5_goal_touched)
+level5_text = TextBox(size=UDim2(), pos=UDim2.from_scale(0.5, 0.5), anchor_point=Vector2(0.5, 0.5),
+                    text_color=(255, 255, 255), font_size=36, text="Biiiig gap")
+level5.add_drawable(level5_text)

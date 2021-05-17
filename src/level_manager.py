@@ -1,3 +1,5 @@
+import sys
+import pygame
 from pygame import Color, error
 import game_objects
 import geometry
@@ -9,10 +11,13 @@ from user_interface import TextBox, Frame, UDim2
 CURRENT_LEVEL = None
 on_level_changed = BindableEvent.new()
 class LevelObject:
-    def __init__(self, player: Player, objects: list[object], drawables: list[object]):
+    def __init__(self, player: Player, objects, drawables):
         self.player = player
         self.objects = list(objects)
         self.drawables = list(drawables)
+        for drawable in self.drawables:
+            if isinstance(drawable, TextBox):
+                drawable.visible = True
 
 class Level:
     def __init__(self, start_x, start_y):
@@ -39,6 +44,10 @@ class Level:
 def change_level(new_level: Level):
     print("Hey level should be changed?")
     global CURRENT_LEVEL
+    if CURRENT_LEVEL:
+        for drawable in CURRENT_LEVEL.drawables:
+            if isinstance(drawable, TextBox):
+                drawable.visible = False
     CURRENT_LEVEL = new_level
     on_level_changed.fire(CURRENT_LEVEL.load())
 
@@ -63,7 +72,7 @@ BLUE = (50, 40, 240)
 goal = game_objects.InteractiveRectangle(760, 260, 40, 40, color=BLUE)
 def goal_touched(player):
     print(test_level)
-    change_level(test_level)
+    change_level(end_level)
 goal.on_touched.connect(goal_touched)
 example_level.add_object(goal)
 
@@ -129,3 +138,24 @@ level5_goal.on_touched.connect(level5_goal_touched)
 level5_text = TextBox(size=UDim2(), pos=UDim2.from_scale(0.5, 0.5), anchor_point=Vector2(0.5, 0.5),
                     text_color=(255, 255, 255), font_size=36, text="Biiiig gap")
 level5.add_drawable(level5_text)
+
+end_level = Level(380, 280)
+end_level.add_rect(200, 100, 20, 400)
+end_level.add_rect(800-220, 100, 20, 400)
+end_level.add_rect(220, 100, 800-420, 20)
+end_level.add_rect(220, 480, 800-420, 20)
+end_level.add_drawable(TextBox(size=UDim2(), pos=UDim2(Vector2(0.5, 0), Vector2(0, 50)),
+                        text="Yaaay you won", font_size=36, text_color=(255, 255, 255)))
+restart = TextBox(size=UDim2.from_offset(175, 100), pos=UDim2(Vector2(0.333, 1), Vector2(0, -20)),
+                anchor_point=Vector2(0.5, 1), text="Restart", font_size=24)
+quit_box =TextBox(size=UDim2.from_offset(175, 100), pos=UDim2(Vector2(0.667, 1), Vector2(0, -20)),
+                anchor_point=Vector2(0.5, 1), text="Quit", font_size=24)
+def on_restart_clicked(inputted):
+    change_level(test_level)
+def on_quit_clicked(inputted):
+    pygame.quit()
+    sys.exit()
+restart.mouse_clicked.connect(on_restart_clicked)
+quit_box.mouse_clicked.connect(on_quit_clicked)
+end_level.add_drawable(restart)
+end_level.add_drawable(quit_box)

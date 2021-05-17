@@ -1,15 +1,14 @@
-import Geometry
+import geometry
 import pygame
-from Vector2 import Vector2, UP, DOWN, LEFT, RIGHT
-from Vector2 import ZERO as ZERO_VECTOR
-from BindableEvent import BindableEvent
-from time import sleep
-from InputHandler import InputHandler
-from Geometry import Ray_Result
+from vector2 import Vector2, UP, DOWN, LEFT, RIGHT
+from vector2 import ZERO as ZERO_VECTOR
+from bindable_event import BindableEvent
+from input_handler import InputHandler
+from geometry import Ray_Result
 
 GRAVITY = Vector2(0, 100)
 
-class InteractiveRectangle(Geometry.Rectangle):
+class InteractiveRectangle(geometry.Rectangle):
     def __init__(self, x, y, w, h, color=None):
         super().__init__(x, y, w, h, color)
         self.on_touched = BindableEvent.new()
@@ -24,7 +23,7 @@ class Player:
         self.max_speed = max_speed
         self.acceleration = acceleration
         self.friction = friction
-        self.rect = Geometry.Rectangle(x, y, 40, 40, color=(230, 50, 50))
+        self.rect = geometry.Rectangle(x, y, 40, 40, color=(230, 50, 50))
         self.jumped = False
         self.teleported = False
         self.alive = True
@@ -67,13 +66,13 @@ class Player:
         self.rect.velocity = self.vel
         collisions = []
         for rectangle in self.object_list:
-            result = Geometry.dynamic_rect_vs_rect(self.rect, rectangle, elapsedTime)
+            result = geometry.dynamic_rect_vs_rect(self.rect, rectangle, elapsedTime)
             if isinstance(result, Ray_Result):
                 collisions.append([rectangle, result.Time])
         collisions.sort(key=lambda s: s[1])
         for i in range(len(collisions)):
             rect = collisions[i][0]
-            result = Geometry.dynamic_rect_vs_rect(self.rect, rect, elapsedTime)
+            result = geometry.dynamic_rect_vs_rect(self.rect, rect, elapsedTime)
             if isinstance(result, Ray_Result):
                 # print("Pos:", self.rect.position)
                 # print("Size:", self.rect.size)
@@ -110,8 +109,8 @@ class Player:
         direction = direction.unit * 80
         resolve = None
         for rect in self.object_list:
-            if Geometry.rect_vs_rect(self.rect.position + direction, self.rect.size, rect.position, rect.size):
-                res = Geometry.dynamic_rect_vs_rect(self.rect, rect, 1/60, direction=direction)
+            if geometry.rect_vs_rect(self.rect.position + direction, self.rect.size, rect.position, rect.size):
+                res = geometry.dynamic_rect_vs_rect(self.rect, rect, 1/60, direction=direction)
                 if isinstance(res, Ray_Result):
                     if not resolve:
                         resolve = res

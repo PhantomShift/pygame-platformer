@@ -1,9 +1,9 @@
-import GameObjects
-import Geometry
 from pygame import Color, error
-from Vector2 import Vector2
-from BindableEvent import BindableEvent
-from GameObjects import Player
+import game_objects
+import geometry
+from vector2 import Vector2
+from bindable_event import BindableEvent
+from game_objects import Player
 
 CURRENT_LEVEL = None
 on_level_changed = BindableEvent.new()
@@ -38,7 +38,7 @@ def reset_level():
 
 example_level = Level(50, 50)
 def construct_platform(x, y, w, h):
-    example_level.add_object(Geometry.Rectangle(x, y, w, h))
+    example_level.add_object(geometry.Rectangle(x, y, w, h))
 construct_platform(0, 200, 200, 20)
 construct_platform(100, 220, 200, 20)
 construct_platform(600, 220, 200, 20)
@@ -46,7 +46,7 @@ construct_platform(640, 300, 200, 20)
 construct_platform(640, 240, 20, 80)
 construct_platform(400, 50, 20, 200)
 
-goal = GameObjects.InteractiveRectangle(760, 260, 40, 40, color=(50, 50, 240))
+goal = game_objects.InteractiveRectangle(760, 260, 40, 40, color=(50, 50, 240))
 def goal_touched(player):
     print(test_level)
     change_level(test_level)
@@ -54,8 +54,8 @@ goal.on_touched.connect(goal_touched)
 example_level.add_object(goal)
 
 test_level = Level(50, 520)
-base = Geometry.Rectangle(0, 580, 800, 120)
-goal2 = GameObjects.InteractiveRectangle(760, 540, 40, 40, color=(50, 50, 240))
+base = geometry.Rectangle(0, 580, 800, 120)
+goal2 = game_objects.InteractiveRectangle(760, 540, 40, 40, color=(50, 50, 240))
 def goal_touched2(player):
     change_level(level2)
 test_level.add_object(base)
@@ -63,18 +63,18 @@ test_level.add_object(goal2)
 goal2.on_touched.connect(goal_touched2)
 
 level2 = Level(50, 520)
-level2.add_object(Geometry.Rectangle(0, 580, 800, 120))
-level2.add_object(GameObjects.KillerRectangle(400, 540, 20, 60))
-level2_goal = GameObjects.InteractiveRectangle(760, 540, 40, 40, color=(50, 50, 240))
+level2.add_object(geometry.Rectangle(0, 580, 800, 120))
+level2.add_object(game_objects.KillerRectangle(400, 540, 20, 60))
+level2_goal = game_objects.InteractiveRectangle(760, 540, 40, 40, color=(50, 50, 240))
 level2.add_object(level2_goal)
 def level2_goal_touched(player):
     change_level(level3)
 level2_goal.on_touched.connect(level2_goal_touched)
 
 level3 = Level(50, 520)
-level3.add_object(Geometry.Rectangle(0, 580, 800, 120))
-level3.add_object(Geometry.Rectangle(400, 0, 20, 800))
-level3_goal = GameObjects.InteractiveRectangle(760, 540, 40, 40, color=(50, 50, 240))
+level3.add_object(geometry.Rectangle(0, 580, 800, 120))
+level3.add_object(geometry.Rectangle(400, 0, 20, 800))
+level3_goal = game_objects.InteractiveRectangle(760, 540, 40, 40, color=(50, 50, 240))
 level3.add_object(level3_goal)
 def level3_goal_touched(player):
     change_level(example_level)

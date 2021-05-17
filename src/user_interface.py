@@ -1,11 +1,10 @@
 import pygame
 import pygame.font
-import Geometry
-from Vector2 import Vector2
-from Vector2 import ZERO as ZERO_VECTOR
-from Instance import Instance
-from BindableEvent import BindableEvent
-from InputHandler import InputHandler, InputObject
+from vector2 import Vector2
+from vector2 import ZERO as ZERO_VECTOR
+from instance import Instance
+from bindable_event import BindableEvent
+from input_handler import InputHandler, InputObject
 
 DEFAULT_FONT = pygame.font.SysFont("Arial", 12)
 
@@ -51,8 +50,6 @@ class GuiObject(Instance, class_name="GuiObject"):
                 (x, y) = pygame.mouse.get_pos()
                 if self.get_pyrect().collidepoint(x, y):
                     self.mouse_clicked.fire(inputted.key)
-                #if Geometry.point_vs_rect(Vector2(x, y), self.absolute_pos, self.absolute_size):
-                #    self.mouse_clicked.fire(inputted.key)
         self.__connections = []
         self.__connections.append(InputHandler.input_began.connect(mouse_clicked))
     
@@ -66,12 +63,13 @@ class GuiObject(Instance, class_name="GuiObject"):
 
     @property
     def absolute_size(self) -> Vector2:
-        (x, y) = self.Parent.absolute_size.unpack() if self.Parent else pygame.display.get_surface().get_size()
+        (x, y) = self.parent.absolute_size.unpack() if self.parent else pygame.display.get_surface().get_size()
         return self.size.offset + self.size.scale * Vector2.new(x, y)
     
     @property
     def absolute_pos(self) -> Vector2:
-        (x, y) = self.Parent.absolute_size.unpack() if self.Parent else pygame.display.get_surface().get_size()
+        print("HEY?")
+        (x, y) = self.parent.absolute_size.unpack() if self.parent else pygame.display.get_surface().get_size()
         return self.pos.offset + self.pos.scale * Vector2.new(x, y) - self.absolute_size * self.anchor_point
 
 class Frame(GuiObject, class_name="Frame"):
@@ -108,7 +106,7 @@ if __name__ == "__main__":
     display = pygame.display.set_mode((300, 400))
     print(pygame.display.get_surface().get_size())
     gui = GuiObject()
-    gui.Name = "Hello"
+    gui.name = "Hello"
     gui.size = UDim2.from_scale(0.5, 0.5)
     gui2 = GuiObject(gui)
     gui2.size = UDim2.from_scale(0.5, 0.5)

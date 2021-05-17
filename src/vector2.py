@@ -1,10 +1,9 @@
 import math
 from math import sqrt
-from numpy import sign
 
 def vector_only(f):
     def wrapper(self, other, *args):
-        if type(self) != Vector2 or type(other) != Vector2:
+        if not (isinstance(self, Vector2) and isinstance(other, Vector2)):
             raise TypeError("Argument must be another Vector2")
         return f(self, other, *args)
     return wrapper
@@ -32,30 +31,30 @@ class Vector2:
         return hash(self) == hash(other)
 
     def __add__(self, other):
-        if type(self) != type(other):
+        if not isinstance(self, type(other)):
             raise TypeError("Vector2s can only be added with other Vector2s")
         return Vector2(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other):
-        if type(self) != type(other):
+        if not isinstance(self, type(other)):
             raise TypeError("Vector2s can only be subtracted by other Vector2s")
         return Vector2(self.x - other.x, self.y - other.y)
 
     def __mul__(self, other):
-        if (type(self) == int or type(self) == float) and type(other) == Vector2:
+        if isinstance(self, (int, float)) and isinstance(other) == Vector2:
             return Vector2(self * other.x, self * other.y)
-        elif type(self) == Vector2 and (type(other) == int or type(other) == float):
+        if isinstance(self, Vector2) and isinstance(other, (int, float)):
             return Vector2(self.x * other, self.y * other)
-        elif type(self) == type(other):
+        if isinstance(self, type(other)):
             return Vector2(self.x * other.x, self.y * other.y)
         raise TypeError("Vector2s must be multiplied with other Vector2s or a number")
 
     def __truediv__(self, other):
         if other == 0:
             return Vector2(math.inf, math.inf)
-        if type(other) == int or type(other) == float:
+        if isinstance(other, (int, float)):
             return Vector2(self.x / other, self.y / other)
-        elif type(other) == Vector2:
+        if isinstance(other, Vector2):
             #print(f"self: {self}, other: {other}")
             return Vector2(self.x / other.x, self.y / other.y)
         raise ValueError("Vector2s must be divided by another Vector2 or a number")
@@ -63,9 +62,9 @@ class Vector2:
     def __floordiv__(self, other):
         if other == 0:
             return Vector2(math.inf, math.inf)
-        if type(other) == int or type(other) == float:
+        if isinstance(other, (int, float)):
             return Vector2(self.x // other, self.y // 0)
-        elif type(other) == Vector2:
+        elif isinstance(other, Vector2):
             return Vector2(self.x // other.x, self.y // other.y)
         raise ValueError("Vector2s must be divided by another Vector2 or a number")
 
@@ -116,7 +115,7 @@ class Vector2:
 
     @vector_only
     def lerp(self, other, a):
-        if type(a) != int and type(a) != float:
+        if not isinstance(a, (int, float)):
             raise TypeError("a must be a number")
         a = max(0, min(a, 1))
         return self.x * (1 - a) + other * a

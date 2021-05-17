@@ -1,5 +1,4 @@
-import pygame
-from BindableEvent import BindableEvent
+from bindable_event import BindableEvent
 
 BEGAN = "BEGAN"
 ENDED = "ENDED"

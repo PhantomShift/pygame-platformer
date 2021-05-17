@@ -1,10 +1,11 @@
-from numpy import sign
-import pygame
 import math
-from Vector2 import Vector2, UP, DOWN, LEFT, RIGHT
 from numbers import Number
 from typing import Union
+from numpy import sign
+import pygame
 from pygame import Rect
+from vector2 import Vector2, UP, DOWN, LEFT, RIGHT
+
 
 def clamp(number, minimum, maximum) -> Number:
     return max(minimum, min(number, maximum))
@@ -25,12 +26,12 @@ class Rectangle:
         self.velocity = Vector2()
         self.color = color
         global ID
-        self.ID = ID
+        self.id = ID
         ID += 1
     def __str__(self):
         return f"Rectangle Position: {self.position}, Size: {self.size}"
     def __hash__(self) -> int:
-        return hash(("Rectangle", ID, ID - 1))
+        return hash(("Rectangle", self.id, self.id - 1))
     
     def as_tuple(self):
         return (self.position.x, self.position.y, self.size.x, self.size.y)
@@ -77,10 +78,10 @@ def ray_vs_rect(origin: Vector2, direction: Vector2, target: Rectangle) -> Union
         t_near, t_far = Vector2(t_far.x, t_near.y), Vector2(t_near.x, t_far.y)
     if t_near.y > t_far.y:
         t_near, t_far = Vector2(t_near.x, t_far.y), Vector2(t_far.x, t_near.y)
-    
+
     if t_near.x > t_far.y or t_near.y > t_far.x:
         return False
-    
+
     t_hit_near = max(t_near.x, t_near.y)
     t_hit_far = min(t_far.x, t_far.y)
 

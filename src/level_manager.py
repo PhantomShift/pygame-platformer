@@ -23,6 +23,10 @@ class Level:
 
     def add_object(self, obj):
         self.objects[obj] = True
+    
+    def add_rect(self, x, y, w, h):
+        rect = geometry.Rectangle(x, y, w, h)
+        self.objects[rect] = True
 
 def change_level(new_level: Level):
     print("Hey level should be changed?")

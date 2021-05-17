@@ -1,6 +1,6 @@
 import sys
 import pygame
-from pygame import Color, error
+from pygame import Color, error, event
 import game_objects
 import geometry
 from vector2 import Vector2
@@ -153,8 +153,7 @@ quit_box =TextBox(size=UDim2.from_offset(175, 100), pos=UDim2(Vector2(0.667, 1),
 def on_restart_clicked(inputted):
     change_level(test_level)
 def on_quit_clicked(inputted):
-    pygame.quit()
-    sys.exit()
+    pygame.event.post(pygame.event.Event(pygame.QUIT))
 restart.mouse_clicked.connect(on_restart_clicked)
 quit_box.mouse_clicked.connect(on_quit_clicked)
 end_level.add_drawable(restart)

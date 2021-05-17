@@ -8,6 +8,7 @@ This little platformer just contains a couple of levels with fairly simple contr
 - A, D - Left and Right, respectively
 - Space -> Space + WASD -> Space - Jump -> Teleport -> Jump (resets when landing)
 > Quick Note: this platformer was developed with Python 3.9 and pygame 2.0.1; I am unaware of how it behaves with any different versions
+> Also ensure that `numpy` is installed; run `python -m pip install numpy` if not
 
 To run the game, run `main.py` in the `src` directory.
 ## Development Process

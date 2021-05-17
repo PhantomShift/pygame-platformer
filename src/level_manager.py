@@ -8,25 +8,32 @@ from game_objects import Player
 CURRENT_LEVEL = None
 on_level_changed = BindableEvent.new()
 class LevelObject:
-    def __init__(self, player: Player, objects: dict):
+    def __init__(self, player: Player, objects: list[object], drawables: list[object]):
         self.player = player
-        self.objects = objects
+        self.objects = list(objects)
+        self.drawables = list(drawables)
 
 class Level:
     def __init__(self, start_x, start_y):
         self.start_x = start_x
         self.start_y = start_y
-        self.objects = {}
+        self.objects = []
+        self.drawables = []
     
     def load(self) -> LevelObject:
-        return LevelObject(Player(self.objects, self.start_x, self.start_y), self.objects)
+        return LevelObject(Player(self.objects, self.start_x, self.start_y), self.objects, self.drawables)
 
     def add_object(self, obj):
-        self.objects[obj] = True
-    
+        self.objects.append(obj)
+        self.drawables.append(obj)
+
     def add_rect(self, x, y, w, h):
         rect = geometry.Rectangle(x, y, w, h)
-        self.objects[rect] = True
+        self.objects.append(rect)
+        self.drawables.append(rect)
+    
+    def add_drawable(self, drawable):
+        self.drawables.append(drawable)
 
 def change_level(new_level: Level):
     print("Hey level should be changed?")

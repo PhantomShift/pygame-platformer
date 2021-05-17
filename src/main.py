@@ -34,8 +34,8 @@ class GameGlobals:
         self.player: game_objects.Player = None
     
     def level_changed(self, new_level: level_manager.LevelObject):
-        self.objects = list(new_level.objects.keys())
-        self.drawables = list(new_level.objects.keys())
+        self.objects = new_level.objects
+        self.drawables = new_level.drawables
         print(self.objects)
         if isinstance(self.player, game_objects.Player):
             self.player.connection_on_died.disconnect()

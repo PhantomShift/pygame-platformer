@@ -89,7 +89,7 @@ class Instance():
 if __name__ == "__main__":
     Root = Instance()
     Root.name = "ROOT"
-    test = Instance.new("Test")
+    test = Instance()
     test2 = Instance()
     test2.parent = test
     test.parent = Root
